@@ -32,7 +32,7 @@ $Group = "Eleads DMZ"
 $verification ="D:\Scripts\Eleadsconfirmreboot.txt"
 
 
-$emailrecipients = "mlbarnes@edmc.edu"           
+$emailrecipients = ""           
 $erroremailrecipients = "" ,            
 $emailfrom = ""            
 $emailserver = ""
