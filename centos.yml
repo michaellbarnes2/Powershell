@@ -1,0 +1,53 @@
+---
+-   hosts: all
+    become: true
+    become_user: root
+    tasks:
+        -   name: Upgrade all packages
+            yum:
+                name: "*"
+                state: latest
+
+        -   name: Disable root login
+            lineinfile:
+                path: /etc/ssh/sshd_config
+                regexp: "^PermitRootLogin .*"
+                line: PermitRootLogin no
+
+        -   name: Enable extra repositories
+            yum:
+                name: epel-release
+                state: latest
+
+        -   name: Install list of packages
+            yum:
+                name: "{{ item }}"
+                state: latest
+            with_items:
+                -   net-tools
+                -   gcc-c++
+                -   openssl-devel
+                -   make
+                -   git
+                -   unzip
+                -   bzip2
+                -   wget
+                -   vim-enhanced
+                -   ntp
+                -   tmux
+                -   dos2unix
+                -   nano
+                -   ansible #Meta
+
+        -   name: Disable SE Linux
+            selinux:
+                policy: targeted
+                state: permissive
+
+        # Logging
+        -   name: Allow logrotate to run hourly
+            copy:
+                src: /etc/cron.daily/logrotate
+                dest: /etc/cron.hourly/logrotate
+                remote_src: true
+
